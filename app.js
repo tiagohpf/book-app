@@ -9,7 +9,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use('/book', bookRouter);
 
-sequelize.sync().then(result => {
+sequelize.sync().then(() => {
+    console.log('Database connected successfully');
     app.listen(PORT, async () => {
         console.log(`Server started on port ${PORT}`);
     });
