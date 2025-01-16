@@ -1,24 +1,16 @@
-const fs = require('fs');
-const csvParser = require('csv-parser');
+const Book = require('../models/book');
 
-const parseCsvFile = (filePath) => {
-    return new Promise((resolve, reject) => {
-        let books_data = [];
-
-        fs.createReadStream(filePath)
-            .pipe(csvParser())
-            .on('data', data => books_data.push(data))
-            .on('end', () => {
-                fs.unlinkSync(filePath);
-                resolve(books_data);
-            })
-            .on('error', err => {
-                fs.unlinkSync(filePath);
-                reject(err)
-            });
-    })
+const addBooks = async (books) => {
+    try {
+        await Book.bulkCreate(books);
+        console.log(`${books.length} added`);
+        return books
+    } catch (error) {
+        console.error('Error adding books');
+        throw error;
+    }
 }
 
 module.exports = {
-    parseCsvFile
+    addBooks
 }
